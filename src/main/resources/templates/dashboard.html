@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The Bol Game</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<noscript>
+	<div class="jumbotron">
+		<h2>Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+			enabled. Please enable Javascript and reload this page!</h2>
+	</div>
+</noscript>
+<div id="main-content" class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<form id="register-for-game">
+				<div class="form-group col-md-4">
+					<label for="username">What is your name?</label>
+					<input type="text" id="username" class="form-control" placeholder="Your name here...">
+				</div>
+				<div class="col-md-12">
+					<button class="btn btn-default" type="submit">Search for a game</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/bootstrap.min.js"></script>
+<script src="/js/lib/sockjs.min.js"></script>
+<script src="/js/lib/stomp.min.js"></script>
+
+<script src="/js/socket/SocketHandler.js"></script>
+<script src="/js/SearchGameHandler.js"></script>
+</body>
+</html>
