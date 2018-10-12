@@ -35,7 +35,7 @@ class SocketHandler {
 			send,
 			headers = {}
 		} = endpoint;
-		this.stomp.send(`/socket/${send}`, headers, JSON.stringify(payload));
+		this.stomp.send(`/socket${send}`, headers, JSON.stringify(payload));
 	}
 
 	initialize(subscribers = []) {
