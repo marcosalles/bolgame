@@ -1,35 +1,33 @@
 package com.marcosalles.bolgame.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marcosalles.bolgame.model.entity.User;
+import com.marcosalles.bolgame.model.entity.Player;
+import com.marcosalles.bolgame.service.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.util.HtmlUtils;
 
-import javax.annotation.security.PermitAll;
-import java.util.UUID;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
-@PermitAll
 @Controller
 public class GameController {
+
+	@Autowired
+	private PlayerService playerService;
 
 	@RequestMapping({"/dashboard"})
 	public String dashboard() {
 		return "dashboard";
 	}
 
-	@MessageMapping("/user/register")
-	@SendTo("/user/registered")
-	public User register(String payload) throws Exception {
-		User user = new ObjectMapper().readValue(payload, User.class);
-		System.out.printf("GameController::register(%s)\n", user.getUsername());
-		Thread.sleep(1000); // simulated delay
-		return User.builder()
-			.id(UUID.randomUUID().toString())
-			.username(HtmlUtils.htmlEscape(user.getUsername()))
-			.build();
+	@MessageMapping("/player/register")
+	@SendTo("/player/registered")
+	public Player register(HttpServletResponse response, String payload) throws Exception {
+		Player player = playerService.findOrCreatePlayerFrom(payload);
+		response.addCookie(new Cookie("bolgame.player.id", player.getId()));
+		return player;
 	}
 
 }

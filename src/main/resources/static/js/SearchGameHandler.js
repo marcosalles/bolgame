@@ -6,29 +6,31 @@ class SearchGameHandler {
 		};
 		this.endpoints = {
 			register: {
-				send: '/user/register',
-				subscribe: '/user/registered'
+				send: '/player/register',
+				subscribe: '/player/registered'
 			}
 		};
 	}
 
-	registerUser() {
-		const user = {username: this.elements.username.val()};
-		this.socket.send(this.endpoints.register, user);
+	registerPlayer() {
+		const player = {username: this.elements.username.val()};
+		this.socket.send(this.endpoints.register, player);
 	}
 
-	didRegister(user) {
-		console.log(`SearchGameHandler::didRegister(${user})`);
+	didRegister(player) {
+		console.log(`SearchGameHandler::didRegister(${player})`);
+
+
 	}
 
 	setupSubscriptions() {
-		this.socket.subscribe(this.endpoints.register.subscribe, user => this.didRegister(user));
+		this.socket.subscribe(this.endpoints.register.subscribe, player => this.didRegister(player));
 	}
 
 	setupListeners() {
 		this.elements.form.on('submit', event => {
 			event.preventDefault();
-			this.registerUser();
+			this.registerPlayer();
 		});
 	}
 
