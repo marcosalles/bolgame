@@ -1,5 +1,6 @@
 class SocketHandler {
 	constructor() {
+		console.log(`>> SocketHandler::constructor() <<`);
 		this.socketId = '/bolgame-socket';
 	}
 
@@ -7,46 +8,42 @@ class SocketHandler {
 		return 'SocketHandler';
 	}
 
-	connect(socketId, callback) {
-		const socket = new SockJS(socketId);
-		const stomp = Stomp.over(socket);
-		stomp.connect({},
+	connect(callback, playerId) {
+		console.log(`>> SocketHandler::connect(${callback}, ${playerId}) <<`);
+		this.stomp.connect({},
 			frame => !!callback && callback(frame)
 		);
-		return stomp;
 	}
 
 	disconnect(callback) {
+		console.log(`>> SocketHandler::disconnect(${callback}) <<`);
+
 		if (!this.stomp) return;
 		this.stomp.disconnect(callback);
 	}
 
 	subscribe(path, callback) {
+		console.log(`>> SocketHandler::subscribe(${path}, ${callback}) <<`);
+
 		if (!this.stomp) return;
-		this.stomp.subscribe(path, (response) => {
+		this.stomp.subscribe(`/${path}`, response => {
 			console.log(`RESPONSE: ${response}`);
-			if (callback) callback(response.body);
+			if (callback) callback(JSON.parse(response.body));
 		});
 	}
 
-	send(endpoint, payload) {
+	send(url, message, headers = {}) {
+		console.log(`>> SocketHandler::send(${url}, ${message}, ${headers}) <<`);
+
 		if (!this.stomp) return;
-		const {
-			send,
-			headers = {}
-		} = endpoint;
-		this.stomp.send(`/socket${send}`, headers, JSON.stringify(payload));
+		this.stomp.send(`/${url}`, headers, JSON.stringify(message.getPayload()));
 	}
 
-	initialize(subscribers = []) {
-		this.stomp = this.connect(this.socketId, frame => {
-			console.log(`Connected: ${frame}`);
-			subscribers.forEach(subscriber => {
-				subscriber.initialize(this);
-				subscriber.setupSubscriptions();
-			});
-		});
+	initialize() {
+		console.log(`>> SocketHandler::initialize() <<`);
+
+		const socket = new SockJS(this.socketId);
+		this.stomp = Stomp.over(socket);
+		this.stomp.debug = null;
 	}
 }
-
-const socketHandler = new SocketHandler();
