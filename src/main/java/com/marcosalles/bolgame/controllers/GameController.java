@@ -1,19 +1,23 @@
 package com.marcosalles.bolgame.controllers;
 
-import com.marcosalles.bolgame.model.entity.Player;
+import com.marcosalles.bolgame.model.entity.Message;
 import com.marcosalles.bolgame.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
+
+import static java.lang.String.format;
 
 @Controller
 public class GameController {
 
+	@Autowired
+	private SimpMessagingTemplate template;
 	@Autowired
 	private PlayerService playerService;
 
@@ -22,12 +26,19 @@ public class GameController {
 		return "dashboard";
 	}
 
-	@MessageMapping("/player/register")
-	@SendTo("/player/registered")
-	public Player register(HttpServletResponse response, String payload) throws Exception {
-		Player player = playerService.findOrCreatePlayerFrom(payload);
-		response.addCookie(new Cookie("bolgame.player.id", player.getId()));
-		return player;
+	@MessageMapping("/game/register-player")
+	public void register(final Message message) throws Exception {
+		final var player = playerService.findOrCreatePlayerFrom(message.getPlayerId(), message.getContents());
+		this.send("/sub/registered-player", player);
+	}
+
+	@MessageMapping("/user/{playerId}/game/search")
+	public void search(@DestinationVariable final String playerId, final Message message) throws Exception {
+		this.send(format("/user/%s/game/searching", playerId), message);
+	}
+
+	private void send(String destination, Serializable payload) {
+		this.template.convertAndSend(destination, payload);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.marcosalles.bolgame.model.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Table(name = "users")
+@EqualsAndHashCode
 public class Player extends BaseEntity {
 
 	@Id
