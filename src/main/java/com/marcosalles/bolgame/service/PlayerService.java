@@ -28,7 +28,7 @@ public class PlayerService {
 	@Autowired
 	private EventPublisher eventPublisher;
 
-	public void registerPlayer(String hash, final String playerId, final String username) {
+	public void registerPlayer(final String hash, final String playerId, final String username) {
 		final var optionalPlayer = playerDAO.findById(playerId);
 		var player = optionalPlayer.orElseGet(() ->
 			Player.builder()
@@ -54,11 +54,10 @@ public class PlayerService {
 
 	public void placeOnQueue(final Player player) {
 		var queuedPlayer = QueuedPlayer.builder().player(player).build();
-		if (queueDAO.exists(Example.of(queuedPlayer))) {
-			return;
+		if (!queueDAO.exists(Example.of(queuedPlayer))) {
+			queueDAO.save(queuedPlayer);
 		}
 
-		queueDAO.save(queuedPlayer);
 		this.eventPublisher.firePlayerQueued(player);
 	}
 

@@ -19,9 +19,11 @@ public class Game extends BaseEntity {
 	@Id
 	private String id;
 
+	@OneToOne
 	@JoinColumn(name = "player_one_id")
 	private Player playerOne;
 
+	@OneToOne
 	@JoinColumn(name = "player_two_id")
 	private Player playerTwo;
 

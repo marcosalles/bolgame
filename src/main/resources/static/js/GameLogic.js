@@ -29,8 +29,12 @@ class GameLogic {
 	startGame(game) {
 		console.log(`>> GameLogic::startGame(${JSON.stringify(game)}}) <<`);
 
-		this.socket.subscribe(this.endpoints.turn.subscribe(this.player.id), result => this.turnEnded(result));
-		this.socket.subscribe(this.endpoints.finished.subscribe(this.player.id), result => this.gameFinished(result));
+		this.socket.subscribe(
+			this.endpoints.turn.subscribe(this.player.id),
+			result => this.turnEnded(result));
+		this.socket.subscribe(
+			this.endpoints.finished.subscribe(this.player.id),
+			result => this.gameFinished(result));
 
 		this.game = {
 			id: game.id,

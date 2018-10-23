@@ -15,7 +15,9 @@ class GameSearchHandler {
 	initialize(socket, player, gameStartedCallback) {
 		this.player = player;
 		this.socket = socket;
-		this.socket.subscribe(this.endpoints.search.subscribe(this.player.id), result => gameStartedCallback(result));
+		this.socket.subscribe(
+			this.endpoints.search.subscribe(this.player.id),
+			result => gameStartedCallback(result));
 	}
 
 	startSearch() {

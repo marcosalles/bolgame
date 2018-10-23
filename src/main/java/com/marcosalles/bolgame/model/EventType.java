@@ -3,7 +3,7 @@ package com.marcosalles.bolgame.model;
 import java.util.Optional;
 
 public enum EventType {
-	PLAYER_REGISTERED("/user/{hash}/registered"),
+	PLAYER_REGISTERED("/user/%s/registered"),
 	QUEUE_UPDATED,
 	GAME_STARTED("/user/%s/game/started");
 

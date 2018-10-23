@@ -22,12 +22,19 @@ class SocketHandler {
 
 	subscribe(path, callback) {
 		console.log(`>> SocketHandler::subscribe(${path}, ${callback}) <<`);
+		const headers = {
+			id: path
+		};
 
 		if (!this.stomp) return;
 		this.stomp.subscribe(`/${path}`, response => {
 			console.log(`RESPONSE: ${response}`);
 			if (callback) callback(JSON.parse(response.body));
-		});
+		}, headers);
+	}
+
+	unsubscribe(hash) {
+		this.stomp.unsubscribe(hash);
 	}
 
 	send(url, message, headers = {}) {

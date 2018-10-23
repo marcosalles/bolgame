@@ -16,17 +16,17 @@ class PlayerRegistryHandler {
 	registerPlayer(username, callback) {
 		console.log(`>> PlayerRegistryHandler::registerPlayer(${username}) <<`);
 		const registryHash = Helper.FUNCTIONS.random();
-		this.endpoints.register.sub = this.socket.subscribe(this.endpoints.register.subscribe(registryHash), player => {
-			this.didRegister(player, callback);
-		});
+		this.socket.subscribe(
+			this.endpoints.register.subscribe(registryHash),
+			player => this.didRegister(registryHash, player, callback));
 
 		const player = Helper.STORAGE.getPlayerData();
-		this.socket.send(this.endpoints.register.send, new Message(username, player.id));
+		this.socket.send(this.endpoints.register.send(registryHash), new Message(username, player.id));
 	}
 
-	didRegister(player, callback) {
+	didRegister(hash, player, callback) {
 		console.log(`>> PlayerRegistryHandler::didRegister(${JSON.stringify(player)}) <<`);
-		this.endpoints.register.sub.unsubscribe();
+		this.socket.unsubscribe(this.endpoints.register.subscribe(hash));
 
 		Helper.STORAGE.savePlayerData(player);
 		callback(player);
