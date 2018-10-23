@@ -10,9 +10,7 @@ class SocketHandler {
 
 	connect(callback, playerId) {
 		console.log(`>> SocketHandler::connect(${callback}, ${playerId}) <<`);
-		this.stomp.connect({},
-			frame => !!callback && callback(frame)
-		);
+		this.stomp.connect({}, frame => callback(frame));
 	}
 
 	disconnect(callback) {
