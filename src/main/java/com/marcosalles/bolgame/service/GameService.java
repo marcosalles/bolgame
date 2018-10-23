@@ -3,9 +3,12 @@ package com.marcosalles.bolgame.service;
 import com.marcosalles.bolgame.dao.GameDAO;
 import com.marcosalles.bolgame.dao.QueueDAO;
 import com.marcosalles.bolgame.model.entity.Game;
+import com.marcosalles.bolgame.model.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,13 +34,18 @@ public class GameService {
 	}
 
 	protected Game startGame() {
+		var players = new ArrayList<Player>();
 		var firstQueuedPlayer = queueDAO.findFirstByOrderByCreatedAtAsc();
-		var playerOne = firstQueuedPlayer.getPlayer();
+		players.add(firstQueuedPlayer.getPlayer());
 		queueDAO.delete(firstQueuedPlayer);
 
 		var secondQueuedPlayer = queueDAO.findFirstByOrderByCreatedAtAsc();
-		var playerTwo = secondQueuedPlayer.getPlayer();
+		players.add(secondQueuedPlayer.getPlayer());
 		queueDAO.delete(secondQueuedPlayer);
+
+		Collections.shuffle(players);
+		var playerOne = players.get(0);
+		var playerTwo = players.get(1);
 
 		var game = Game.builder()
 			.id(UUID.randomUUID().toString())
