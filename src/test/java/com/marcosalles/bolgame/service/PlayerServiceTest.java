@@ -1,15 +1,13 @@
 package com.marcosalles.bolgame.service;
 
 import com.marcosalles.bolgame.dao.PlayerDAO;
+import com.marcosalles.bolgame.dao.QueueDAO;
+import com.marcosalles.bolgame.event.EventPublisher;
 import com.marcosalles.bolgame.model.entity.Player;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,15 +19,20 @@ public class PlayerServiceTest {
 
 	private PlayerService service;
 	private PlayerDAO playerDAO;
+	private QueueDAO queueDAO;
+	private EventPublisher eventPublisher;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		playerDAO = mock(PlayerDAO.class);
-		service = new PlayerService(playerDAO);
+		queueDAO = mock(QueueDAO.class);
+		eventPublisher = mock(EventPublisher.class);
+		service = new PlayerService(playerDAO, queueDAO, eventPublisher);
 	}
 
 	@Test
-	public void findOrCreatePlayerFrom__should_return_entity_when_id_has_been_registered() {
+	public void registerPlayer__should_save_player_and_fire_event_when_id_has_been_registered() {
+		var hash = "some-hash";
 		var id = "some-id";
 		var username = "username";
 		var savedPlayer = Player.builder().id(id).username(username).build();
@@ -37,13 +40,14 @@ public class PlayerServiceTest {
 			.when(playerDAO).findById(id);
 		doReturn(savedPlayer).when(playerDAO).save(savedPlayer);
 
-		var player = service.findOrCreatePlayerFrom(id, username);
+		service.registerPlayer(hash, id, username);
 		verify(playerDAO).save(savedPlayer);
-		assertThat(player, is(savedPlayer));
+		verify(eventPublisher).firePlayerRegistered(hash, savedPlayer);
 	}
 
 	@Test
-	public void findOrCreatePlayerFrom__should_build_and_return_new_player_when_id_has_not_been_registered() {
+	public void registerPlayer__should_build_and_save_new_player_and_fire_event_when_id_has_not_been_registered() {
+		var hash = "some-hash";
 		var id = "some-id";
 		var username = "username";
 
@@ -52,9 +56,9 @@ public class PlayerServiceTest {
 		var builtPlayer = Player.builder().id(id).username(username).build();
 		doReturn(builtPlayer).when(playerDAO).save(any());
 
-		var player = service.findOrCreatePlayerFrom(id, username);
+		service.registerPlayer(hash, id, username);
 		verify(playerDAO, never()).save(builtPlayer);
-		assertThat(player, is(builtPlayer));
+		verify(eventPublisher).firePlayerRegistered(hash, builtPlayer);
 	}
 
 	@Test

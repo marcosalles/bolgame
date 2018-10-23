@@ -1,10 +1,14 @@
 package com.marcosalles.bolgame.service;
 
 import com.marcosalles.bolgame.dao.PlayerDAO;
+import com.marcosalles.bolgame.dao.QueueDAO;
+import com.marcosalles.bolgame.event.EventPublisher;
 import com.marcosalles.bolgame.model.entity.Player;
+import com.marcosalles.bolgame.model.entity.QueuedPlayer;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.util.StringUtils;
@@ -19,17 +23,22 @@ public class PlayerService {
 
 	@Autowired
 	private PlayerDAO playerDAO;
+	@Autowired
+	private QueueDAO queueDAO;
+	@Autowired
+	private EventPublisher eventPublisher;
 
-	public Player findOrCreatePlayerFrom(final String playerId, final String username) {
-		var optionalPlayer = playerDAO.findById(playerId);
+	public void registerPlayer(String hash, final String playerId, final String username) {
+		final var optionalPlayer = playerDAO.findById(playerId);
 		var player = optionalPlayer.orElseGet(() ->
 			Player.builder()
-				.id(Optional.ofNullable(playerId).orElseGet(() -> UUID.randomUUID().toString()))
+				.id(UUID.randomUUID().toString())
 				.build()
 		);
 		this.changeUsernameIfNotAnon(player, username);
 
-		return playerDAO.save(player);
+		player = playerDAO.save(player);
+		this.eventPublisher.firePlayerRegistered(hash, player);
 	}
 
 	protected void changeUsernameIfNotAnon(final Player player, final String username) {
@@ -41,5 +50,19 @@ public class PlayerService {
 		if (userWasAnon || newUsernameIsCustom) {
 			player.setUsername(HtmlUtils.htmlEscape(username));
 		}
+	}
+
+	public void placeOnQueue(final Player player) {
+		var queuedPlayer = QueuedPlayer.builder().player(player).build();
+		if (queueDAO.exists(Example.of(queuedPlayer))) {
+			return;
+		}
+
+		queueDAO.save(queuedPlayer);
+		this.eventPublisher.firePlayerQueued(player);
+	}
+
+	public Optional<Player> getPlayerFor(final String playerId) {
+		return playerDAO.findById(playerId);
 	}
 }
