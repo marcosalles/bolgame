@@ -1,9 +1,6 @@
 package com.marcosalles.bolgame.model.entity;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,18 +11,17 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @Setter
-@Table(name = "users")
+@Table(name = "players")
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Player extends BaseEntity {
 
 	@Id
 	private String id;
+
 	@NotBlank
 	@Column(nullable = false)
 	private String username;
-
-	public Player() {
-	}
 
 	@Builder
 	public Player(String id, String username) {
