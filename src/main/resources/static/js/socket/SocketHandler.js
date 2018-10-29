@@ -37,7 +37,7 @@ class SocketHandler {
 		this.stomp.unsubscribe(hash);
 	}
 
-	send(url, message, headers = {}) {
+	send(url, message = {}, headers = {}) {
 		console.log(`>> SocketHandler::send(${url}, ${message}, ${headers}) <<`);
 
 		if (!this.stomp) return;

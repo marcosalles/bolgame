@@ -6,10 +6,10 @@ const gameLogic = new GameLogic();
 socketHandler.initialize();
 socketHandler.connect(() => {
 	playerRegistryHandler.initialize(socketHandler, player => {
-		gameSearchHandler.initialize(socketHandler, player, game => {
+		gameSearchHandler.initialize(socketHandler, player);
+		gameSearchHandler.startSearch(game => {
 			gameLogic.initialize(socketHandler, player);
 			gameLogic.startGame(game);
 		});
-		gameSearchHandler.startSearch();
 	});
 });

@@ -7,10 +7,18 @@ const GameState = {
 class GameLogic {
 	constructor() {
 		console.log(`>> GameLogic::constructor() <<`);
+		this.player = {};
+		this.socket = undefined;
+		this.turnOrder = {
+			player: 'one',
+			opponent: 'two'
+		};
+
 		this.elements = {
+			playerHeader: $('#player-header'),
 			players: {
-				one: $('#playerOne'),
-				two: $('#playerTwo')
+				one: $('#game-player-one'),
+				two: $('#game-player-two')
 			},
 			board: $('#game')
 		};
@@ -38,12 +46,12 @@ class GameLogic {
 
 		this.game = {
 			id: game.id,
-			playerOne: game.playerOne,
-			playerTwo: game.playerTwo,
+			playerone: game.playerOne,
+			playertwo: game.playerTwo,
 			state: game.state
 		};
 
-		this.elements.board.on('click', event => {
+		this.elements.board.on('click', '.action-packed', event => {
 			console.log(`Tapped ${event.target.id}`);
 		});
 
@@ -73,10 +81,16 @@ class GameLogic {
 	}
 
 	setPlayerNames() {
-		this.elements.players.one.text(this.game.playerOne.username);
-		this.elements.players.two.text(this.game.playerTwo.username);
-		const playerLabel = this.thisIsPlayerOne() ? this.elements.players.one : this.elements.players.two;
-		playerLabel.text(`${playerLabel.text()} (YOU)`);
+		this.turnOrder.player = this.thisIsPlayerOne() ? 'one' : 'two';
+		this.turnOrder.opponent = this.thisIsPlayerOne() ? 'two' : 'one';
+
+		let playerUsername = this.player.username;
+		let opponentUsername = this.game[`player${this.turnOrder.opponent}`].username;
+		this.elements.playerHeader.text(`<em>${playerUsername}</em> is playing against <em>${opponentUsername}</em>`);
+
+		this.elements.players.one.text(this.game.playerone.username);
+		this.elements.players.two.text(this.game.playertwo.username);
+		this.elements.players[this.turnOrder.player].append(' (YOU)');
 	}
 
 	turnEnded(result) {

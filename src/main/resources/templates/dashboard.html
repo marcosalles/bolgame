@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title>The Bol Game</title>
-	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/lib/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/game.css" rel="stylesheet">
 </head>
 <body>
 <noscript>
@@ -24,33 +25,34 @@
 				</div>
 			</form>
 		</div>
-		<div id="game" class="row" style="margin-top: 20px">
-			<table class="table table-bordered table-responsive">
-				<tr>
-					<td colspan="10">Player 1: <span id="playerOne"></span></td>
-				</tr>
-				<tr>
-					<td id="p1-pit" rowspan="2">0</td>
-					<td id="1">6</td>
-					<td id="2">6</td>
-					<td id="3">6</td>
-					<td id="4">6</td>
-					<td id="5">6</td>
-					<td id="6">6</td>
-					<td id="p2-pit" rowspan="2">0</td>
-				</tr>
-				<tr>
-					<td id="7">6</td>
-					<td id="8">6</td>
-					<td id="9">6</td>
-					<td id="10">6</td>
-					<td id="11">6</td>
-					<td id="12">6</td>
-				</tr>
-				<tr>
-					<td colspan="10" style="text-align: right">Player 2: <span id="playerTwo"></span></td>
-				</tr>
-			</table>
+		<div class="row">
+			<h2 id="player-header"></h2>
+		</div>
+		<div class="row game" style="margin-top: 20px">
+			<label class="game__player game__player--one" id="game-player-one">Player One:</label>
+			<div class="game__board">
+				<button class="pit pit--big" id="pit-one-big" data-stones="0"></button>
+				<div class="game__small-pits-container">
+					<div class="game__small-pits game__small-pits--one">
+						<button class="pit" id="pit-one-1" data-stones="6"></button>
+						<button class="pit" id="pit-one-2" data-stones="6"></button>
+						<button class="pit" id="pit-one-3" data-stones="6"></button>
+						<button class="pit" id="pit-one-4" data-stones="6"></button>
+						<button class="pit" id="pit-one-5" data-stones="6"></button>
+						<button class="pit" id="pit-one-6" data-stones="6"></button>
+					</div>
+					<div class="game__small-pits game__small-pits--two">
+						<button class="pit" id="pit-two-1" data-stones="0"></button>
+						<button class="pit" id="pit-two-2" data-stones="6"></button>
+						<button class="pit" id="pit-two-3" data-stones="6"></button>
+						<button class="pit" id="pit-two-4" data-stones="6"></button>
+						<button class="pit" id="pit-two-5" data-stones="6"></button>
+						<button class="pit" id="pit-two-6" data-stones="6"></button>
+					</div>
+				</div>
+				<button class="pit pit--big" id="pit-two-big" data-stones="0"></button>
+			</div>
+			<label class="game__player game__player--two" id="game-player-two">Player Two:</label>
 		</div>
 	</div>
 </main>

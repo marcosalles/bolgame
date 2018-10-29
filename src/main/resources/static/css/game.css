@@ -1,0 +1,94 @@
+.game {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 5px;
+	border: 1px solid #eee;
+}
+
+.game__player {
+	display: block;
+	width: 100%;
+	margin: 0;
+}
+
+.game__player--one {
+	padding: 5px 0 10px;
+}
+
+.game__player--two {
+	text-align: right;
+	padding: 8px 0 6px;
+}
+
+.game__board {
+	display: flex;
+	justify-content: space-between;
+
+	width: 100%;
+	height: 150px;
+
+	background-color: #8a6d3b;
+	background-image: url(/img/retina_wood.png);
+	background-repeat: repeat;
+	background-size: 50%;
+	background-clip: border-box;
+}
+
+.game__small-pits-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 150px;
+	width: 74%;
+}
+
+.game__small-pits {
+	display: flex;
+	justify-content: space-between;
+	height: 49%;
+}
+
+.pit {
+	position: relative;
+	width: 16%;
+	height: 100%;
+	padding: 0;
+	background: transparent;
+	border: 7px solid transparent;
+	-webkit-border-image: url(/img/purty_wood.png) 1 round; /* Safari 3.1-5 */
+	-o-border-image: url(/img/purty_wood.png) 1 round; /* Opera 11-12.1 */
+	border-image: url(/img/purty_wood.png) 1 round;
+}
+
+.pit:before {
+	content: '';
+	position: absolute;
+	top: 5px;
+	left: calc(50% - 30px);
+	display: block;
+	width: 60px;
+	height: 40px;
+	background-position: 0 0;
+	background-image: url(/img/marble.png);
+	background-size: 20px;
+}
+
+.pit[data-stones="0"]:before {
+	display: none;
+}
+
+.pit:after {
+	content: attr(data-stones);
+	display: block;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 10px;
+}
+
+.pit--big {
+	width: 12.5%;
+}
+
