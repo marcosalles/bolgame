@@ -21,7 +21,7 @@ class GameLogic {
 				two: $('#game-player-two')
 			},
 			game: {
-				board: $('#game'),
+				board: $('.game'),
 				pitsFor: (player) => $(`.pit[data-owner="${player}"]`),
 				allPits: $('.pit'),
 				pitWithId: (id) => $(`.pit#${id}`)
@@ -44,6 +44,7 @@ class GameLogic {
 
 	startGame(game) {
 		console.log(`>> GameLogic::startGame(${JSON.stringify(game)}}) <<`);
+		this.disableBoard();
 
 		this.socket.subscribe(
 			this.endpoints.refresh.subscribe(this.player.id),
@@ -55,6 +56,8 @@ class GameLogic {
 			this.endpoints.finished.subscribe(this.player.id),
 			result => this.gameFinished(result));
 
+		this.elements.game.board.removeClass('game--inactive');
+
 		this.updateGame(game);
 
 		this.turnOrder.player = this.thisIsPlayerOne() ? 'one' : 'two';
@@ -62,7 +65,6 @@ class GameLogic {
 
 		this.setPlayerNames();
 
-		this.elements.game.pitsFor(this.turnOrder.opponent).css('pointer-events', 'none');
 		this.elements.game.pitsFor(this.turnOrder.player).on('click', event => {
 			this.sendMove($(event.target));
 		});
@@ -113,6 +115,7 @@ class GameLogic {
 		Object.keys(pitValues).forEach(id => {
 			this.elements.game.pitWithId(id).attr('data-stones', pitValues[id]);
 		});
+		this.enableBoard();
 	}
 
 	setPlayerNames() {
@@ -154,7 +157,6 @@ class GameLogic {
 	turnOver(game) {
 		console.log(`>> GameLogic::turnOver(${JSON.stringify(game)}}) <<`);
 		this.updateBoard(game);
-		this.enableBoard();
 	}
 
 	gameFinished(result) {
