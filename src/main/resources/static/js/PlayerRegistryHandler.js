@@ -1,4 +1,5 @@
 class PlayerRegistryHandler {
+	// TODO try to get ongoing game and add quit button
 	constructor() {
 		console.log(`>> PlayerRegistryHandler::constructor() <<`);
 		this.elements = {

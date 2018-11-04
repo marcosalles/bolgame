@@ -49,6 +49,31 @@ public class EventPublisher {
 			.type(GAME_STARTED)
 			.id(game.getPlayerTwo().getId())
 			.payload(game)
-			.build()); //FIXME algo está replicando o usuario na localstorage inter-browsers
+			.build());
+	}
+
+	public void fireMoveMade(Game game) {
+		this.fire(Event.builder()
+			.source(this)
+			.type(game.getState().getEventToFire())
+			.id(game.getPlayerOne().getId())
+			.payload(game)
+			.build());
+
+		this.fire(Event.builder()
+			.source(this)
+			.type(game.getState().getEventToFire())
+			.id(game.getPlayerTwo().getId())
+			.payload(game)
+			.build());
+	}
+
+	public void fireInvalidDataFor(Player player, Game game) {
+		this.fire(Event.builder()
+			.source(this)
+			.type(REFRESH)
+			.id(player.getId())
+			.payload(game)
+			.build());
 	}
 }

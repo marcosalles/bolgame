@@ -9,14 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
+@Service
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerService {

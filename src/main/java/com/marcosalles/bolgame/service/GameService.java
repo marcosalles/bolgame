@@ -2,17 +2,19 @@ package com.marcosalles.bolgame.service;
 
 import com.marcosalles.bolgame.dao.GameDAO;
 import com.marcosalles.bolgame.dao.QueueDAO;
+import com.marcosalles.bolgame.event.EventPublisher;
+import com.marcosalles.bolgame.model.dto.TurnInfo;
 import com.marcosalles.bolgame.model.entity.Game;
 import com.marcosalles.bolgame.model.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
+@Service
 public class GameService {
 
 	public static final long NUMBER_OF_PLAYERS_FOR_GAME = 2L;
@@ -20,6 +22,8 @@ public class GameService {
 	private GameDAO gameDAO;
 	@Autowired
 	private QueueDAO queueDAO;
+	@Autowired
+	private EventPublisher eventPublisher;
 
 	public Optional<Game> createGameIfPossible() {
 		if (this.isReadyToStartGame()) {
@@ -30,18 +34,18 @@ public class GameService {
 	}
 
 	protected boolean isReadyToStartGame() {
-		return queueDAO.count() >= NUMBER_OF_PLAYERS_FOR_GAME;
+		return this.queueDAO.count() >= NUMBER_OF_PLAYERS_FOR_GAME;
 	}
 
 	protected Game startGame() {
 		var players = new ArrayList<Player>();
-		var firstQueuedPlayer = queueDAO.findFirstByOrderByCreatedAtAsc();
+		var firstQueuedPlayer = this.queueDAO.findFirstByOrderByCreatedAtAsc();
 		players.add(firstQueuedPlayer.getPlayer());
-		queueDAO.delete(firstQueuedPlayer);
+		this.queueDAO.delete(firstQueuedPlayer);
 
-		var secondQueuedPlayer = queueDAO.findFirstByOrderByCreatedAtAsc();
+		var secondQueuedPlayer = this.queueDAO.findFirstByOrderByCreatedAtAsc();
 		players.add(secondQueuedPlayer.getPlayer());
-		queueDAO.delete(secondQueuedPlayer);
+		this.queueDAO.delete(secondQueuedPlayer);
 
 		Collections.shuffle(players);
 		var playerOne = players.get(0);
@@ -53,7 +57,25 @@ public class GameService {
 			.playerTwo(playerTwo)
 			.build();
 
-		return gameDAO.save(game);
+		return this.gameDAO.save(game);
 	}
 
+	public void makeMoveFor(Player player, TurnInfo turnInfo) {
+		this.gameDAO.findById(turnInfo.getGameId())
+			.ifPresentOrElse(
+				game -> {
+					boolean moveMade = game.makeMove(player, turnInfo.getPitId());
+					if (moveMade) {
+						this.gameDAO.save(game);
+						this.eventPublisher.fireMoveMade(game);
+					}
+				},
+				() -> this.notifyInvalidData(player)
+			);
+	}
+
+	public void notifyInvalidData(Player player) {
+		var game = this.gameDAO.findByParticipantId(player.getId());
+		this.eventPublisher.fireInvalidDataFor(player, game);
+	}
 }

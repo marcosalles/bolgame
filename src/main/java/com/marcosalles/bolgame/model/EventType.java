@@ -3,9 +3,12 @@ package com.marcosalles.bolgame.model;
 import java.util.Optional;
 
 public enum EventType {
+	REFRESH("/user/%s/game/refresh"),
 	PLAYER_REGISTERED("/user/%s/registered"),
 	QUEUE_UPDATED,
-	GAME_STARTED("/user/%s/game/started");
+	GAME_STARTED("/user/%s/game/started"),
+	TURN_OVER("/user/%s/game/turnover"),
+	GAME_FINISHED("/user/%s/game/finished");
 
 	private Optional<String> endpoint;
 
@@ -25,8 +28,5 @@ public enum EventType {
 		return endpoint.map(
 			path -> String.format(path, hash)
 		).get();
-	}
-
-	public void resolve(Event event) {
 	}
 }

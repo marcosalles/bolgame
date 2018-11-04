@@ -49,16 +49,30 @@
 	height: 49%;
 }
 
+.game__small-pits--one {
+	border-bottom: 2px solid black;
+	border-right: 2px solid black;
+}
+
+.game__small-pits--two {
+	border-top: 2px solid black;
+	border-left: 2px solid black;
+}
+
 .pit {
 	position: relative;
 	width: 16%;
 	height: 100%;
 	padding: 0;
 	background: transparent;
-	border: 7px solid transparent;
+	border: 7px solid #9a5240;
 	-webkit-border-image: url(/img/purty_wood.png) 1 round; /* Safari 3.1-5 */
 	-o-border-image: url(/img/purty_wood.png) 1 round; /* Opera 11-12.1 */
 	border-image: url(/img/purty_wood.png) 1 round;
+}
+
+.pit[data-stones="0"] {
+	pointer-events: none;
 }
 
 .pit:before {

@@ -5,10 +5,10 @@ class Message {
 	}
 
 	getPayload() {
-		return {
-			playerId: this.playerId,
-			contents: this.contents
-		};
+		const payload = {};
+		if (this.contents) payload.contents = this.contents;
+		if (this.playerId) payload.playerId = this.playerId;
+		return payload;
 	}
 
 }
