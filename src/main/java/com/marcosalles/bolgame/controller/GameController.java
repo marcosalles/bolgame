@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class GameController {
@@ -18,9 +18,9 @@ public class GameController {
 	@Autowired
 	private GameService gameService;
 
-	@RequestMapping({"/", "/dashboard"})
-	public String dashboard() {
-		return "dashboard";
+	@GetMapping("/play")
+	public String play() {
+		return "play";
 	}
 
 	@MessageMapping("/user/{hash}/register")

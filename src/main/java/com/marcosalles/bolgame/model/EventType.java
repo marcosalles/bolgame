@@ -8,7 +8,8 @@ public enum EventType {
 	QUEUE_UPDATED,
 	GAME_STARTED("/user/%s/game/started"),
 	TURN_OVER("/user/%s/game/turnover"),
-	GAME_FINISHED("/user/%s/game/finished");
+	GAME_FINISHED("/user/%s/game/finished"),
+	SCORE_SAVED("/user/%s/game/score/saved");
 
 	private Optional<String> endpoint;
 
