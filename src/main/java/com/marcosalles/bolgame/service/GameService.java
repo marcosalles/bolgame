@@ -2,6 +2,7 @@ package com.marcosalles.bolgame.service;
 
 import com.marcosalles.bolgame.dao.GameDAO;
 import com.marcosalles.bolgame.dao.QueueDAO;
+import com.marcosalles.bolgame.dao.ScoreDAO;
 import com.marcosalles.bolgame.event.EventPublisher;
 import com.marcosalles.bolgame.model.dto.TurnInfo;
 import com.marcosalles.bolgame.model.entity.Game;
@@ -22,6 +23,8 @@ public class GameService {
 	private GameDAO gameDAO;
 	@Autowired
 	private QueueDAO queueDAO;
+	@Autowired
+	private ScoreDAO scoreDAO;
 	@Autowired
 	private EventPublisher eventPublisher;
 
@@ -77,5 +80,10 @@ public class GameService {
 	public void notifyInvalidData(Player player) {
 		var game = this.gameDAO.findByParticipantId(player.getId());
 		this.eventPublisher.fireInvalidDataFor(player, game);
+	}
+
+	public void createLogFor(Game game) {
+		var score = this.scoreDAO.save(game.buildScore());
+		this.eventPublisher.fireScoreSaved(score);
 	}
 }

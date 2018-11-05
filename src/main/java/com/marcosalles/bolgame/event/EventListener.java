@@ -1,6 +1,7 @@
 package com.marcosalles.bolgame.event;
 
 import com.marcosalles.bolgame.model.Event;
+import com.marcosalles.bolgame.model.entity.Game;
 import com.marcosalles.bolgame.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -24,9 +25,13 @@ public class EventListener implements ApplicationListener<Event> {
 		var eventType = event.getType();
 		switch (eventType) {
 			case QUEUE_UPDATED: {
-				gameService
+				this.gameService
 					.createGameIfPossible()
-					.ifPresent(eventPublisher::fireGameStarted);
+					.ifPresent(this.eventPublisher::fireGameStarted);
+			}
+			case GAME_FINISHED: {
+				this.gameService
+					.createLogFor((Game)event.getPayload());
 			}
 		}
 		if (eventType.triggersAutoMessage()) {

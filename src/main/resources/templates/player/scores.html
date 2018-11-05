@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<title>The Bol Game</title>
+	<link href="/css/lib/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<main class="container">
+	<div class="jumbotron">
+		<h1>Player <span th:text="${player.username}">anonymous</span>'s history</h1>
+		<p>Wow, such games, much wins, very losses!</p>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Played against</th>
+				<th>Score</th>
+				<th>Victory!</th>
+				<th>Start</th>
+				<th>Finish</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="score : ${scores}">
+				<td th:text="${score.getOpponentsUsername(player)}"></td>
+				<td th:text="${score.scoreVersus}"></td>
+				<td th:text="${score.isWinner(player)}"></td>
+				<td th:text="${score.createdAt}"></td>
+				<td th:text="${score.updatedAt}"></td>
+			</tr>
+		</tbody>
+	</table>
+</main>
+
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/bootstrap.min.js"></script>
+</body>
+</html>

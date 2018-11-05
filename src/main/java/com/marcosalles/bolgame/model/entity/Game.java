@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.sql.RowSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,8 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.IntStream.rangeClosed;
 
 @Entity
-@Getter
 @Table(name = "games")
+@Getter
 @NoArgsConstructor
 public class Game extends BaseEntity {
 
@@ -147,5 +148,30 @@ public class Game extends BaseEntity {
 	protected void goToNextState() {
 		boolean finished = this.anyPlayersPitsAreAllEmpty();
 		this.setState(this.state.next(finished));
+	}
+
+	public Score buildScore() {
+		var playerOneScore = this.pits.get("pit-one-big");
+		var playerTwoScore = this.pits.get("pit-two-big");
+		Player winner = null;
+		if (playerOneScore > playerTwoScore) {
+			winner = this.playerOne;
+		} else if (playerOneScore < playerTwoScore) {
+			winner = this.playerTwo;
+		}
+		return Score.builder()
+			.game(this)
+			.playerOneScore(playerOneScore)
+			.playerTwoScore(playerTwoScore)
+			.winner(winner)
+			.build();
+	}
+
+	public boolean is(GameState state) {
+		return this.state.equals(state);
+	}
+
+	public Player getOpponent(Player player) {
+		return playerOne.equals(player) ? playerTwo : playerOne;
 	}
 }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The Bol Game</title>
+	<link href="/css/lib/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/game.css" rel="stylesheet">
+</head>
+<body>
+<noscript>
+	<div class="jumbotron">
+		<h2>Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+			enabled. Please enable Javascript and reload this page!</h2>
+	</div>
+</noscript>
+<main id="main-content" class="container">
+	<div class="row">
+		<div class="jumbotron">
+			<h1>Bolgame</h1>
+			<p>A game of strategy and conquest between two fierce adversaries!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<form id="register-for-game">
+				<div class="form-group col-md-4">
+					<label for="username">What is your name?</label>
+					<input type="text" id="username" class="form-control" placeholder="Your name here..." minlength="3" required>
+				</div>
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-default">Search for a game</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<h2 id="player-header"></h2>
+	</div>
+	<div class="row game game--inactive">
+		<label class="game__player game__player--one" id="game-player-one">Player One:</label>
+		<div class="game__board">
+			<button type="button" class="pit pit--big" id="pit-one-big" data-owner="one" data-stones="0"></button>
+			<div class="game__small-pits-container">
+				<div class="game__small-pits game__small-pits--one">
+					<button type="button" class="pit" id="pit-one-6" data-owner="one" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-one-5" data-owner="one" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-one-4" data-owner="one" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-one-3" data-owner="one" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-one-2" data-owner="one" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-one-1" data-owner="one" data-stones="6"></button>
+				</div>
+				<div class="game__small-pits game__small-pits--two">
+					<button type="button" class="pit" id="pit-two-1" data-owner="two" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-two-2" data-owner="two" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-two-3" data-owner="two" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-two-4" data-owner="two" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-two-5" data-owner="two" data-stones="6"></button>
+					<button type="button" class="pit" id="pit-two-6" data-owner="two" data-stones="6"></button>
+				</div>
+			</div>
+			<button type="button" class="pit pit--big" id="pit-two-big" data-owner="two" data-stones="0"></button>
+		</div>
+		<label class="game__player game__player--two" id="game-player-two">Player Two:</label>
+	</div>
+	<div class="row">
+		<h3>Instructions</h3>
+		<ol>
+			<li>
+				<h4>The players:</h4>
+				<ul>
+					<li>The game is played by two players (P1 and P2)</li>
+					<li>Each player owns six pits and a single big pit</li>
+				</ul>
+			</li>
+			<li>
+				<h4>The board:</h4>
+				<ul>
+					<li>The board is divided in half between the two players</li>
+					<li>The pits owned by P1 are: the big pit to the left and the six top pits in the middle</li>
+					<li>The pits owned by P2 are: the big pit to the right and the six bottom pits in the middle</li>
+					<li>The pits are ordered in a counter-clockwise manner, so a player's first pit is always the farthest one from it's own big pit</li>
+					<li>The big pits start empty and all the other pits start with 6 marbles each</li>
+					<li>The amount of marbles in a pit is represented by the number written at the bottom of the pit</li>
+					<li>A non-empty pit has the visual aid of a drawing with marbles on it</li>
+				</ul>
+			</li>
+			<li>
+				<h4>The game:</h4>
+				<ul>
+					<li>The objective of the game is to have the most marbles in your own big pit when it ends</li>
+					<li>P1 and P2 are randomized upon creation of the game and P1 always starts</li>
+					<li>A move consists of choosing a pit. When you click on it you sow all the marbles in that pit in a counter-clockwise manner, dropping one marble in each of the pits</li>
+					<li>If you pass through your opponent's big pit while sowing your marbles, skip it</li>
+					<li>If, during a move, the last marble sown falls in your own big pit, you get an extra turn. This has no limit and can be repeated indefinitely</li>
+					<li>If, during a move, the last marble sown falls in an empty pit of your own, you capture the opponent's opposite pit's marbles and place them in your own pit</li>
+					<li>The game ends when any one player's pits are empty and the player can't make a move</li>
+					<li>When the game ends, all remaining marbles not in a big pit are moved to that player's big pit</li>
+				</ul>
+			</li>
+		</ol>
+	</div>
+</main>
+
+<script src="/js/lib/jquery.min.js"></script>
+<script src="/js/lib/bootstrap.min.js"></script>
+<script src="/js/lib/sockjs.min.js"></script>
+<script src="/js/lib/stomp.min.js"></script>
+
+<script src="/js/Helper.js"></script>
+<script src="/js/GameLogic.js"></script>
+<script src="/js/GameSearchHandler.js"></script>
+
+<script src="/js/socket/Message.js"></script>
+<script src="/js/socket/SocketHandler.js"></script>
+
+<script src="/js/PlayerRegistryHandler.js"></script>
+
+<script src="/js/Play.js"></script>
+</body>
+</html>

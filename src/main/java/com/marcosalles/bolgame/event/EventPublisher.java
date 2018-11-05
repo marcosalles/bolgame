@@ -3,6 +3,7 @@ package com.marcosalles.bolgame.event;
 import com.marcosalles.bolgame.model.Event;
 import com.marcosalles.bolgame.model.entity.Game;
 import com.marcosalles.bolgame.model.entity.Player;
+import com.marcosalles.bolgame.model.entity.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -74,6 +75,23 @@ public class EventPublisher {
 			.type(REFRESH)
 			.id(player.getId())
 			.payload(game)
+			.build());
+	}
+
+	public void fireScoreSaved(Score score) {
+		var game = score.getGame();
+		this.fire(Event.builder()
+			.source(this)
+			.type(SCORE_SAVED)
+			.id(game.getPlayerOne().getId())
+			.payload(score)
+			.build());
+
+		this.fire(Event.builder()
+			.source(this)
+			.type(SCORE_SAVED)
+			.id(game.getPlayerTwo().getId())
+			.payload(score)
 			.build());
 	}
 }
