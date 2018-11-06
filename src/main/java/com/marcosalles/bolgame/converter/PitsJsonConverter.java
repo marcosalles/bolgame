@@ -1,11 +1,9 @@
 package com.marcosalles.bolgame.converter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.io.IOException;
 import java.util.Map;
 
 @Converter(autoApply = true)
@@ -15,9 +13,13 @@ public class PitsJsonConverter implements AttributeConverter<Map<String, Integer
 
 	@Override
 	public String convertToDatabaseColumn(Map<String, Integer> map) {
+		if (map == null) {
+			return null;
+		}
+
 		try {
 			return mapper.writeValueAsString(map);
-		} catch (JsonProcessingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -27,7 +29,7 @@ public class PitsJsonConverter implements AttributeConverter<Map<String, Integer
 	public Map<String, Integer> convertToEntityAttribute(String string) {
 		try {
 			return mapper.readValue(string, Map.class);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return Map.of();
