@@ -29,10 +29,6 @@ public class EventListener implements ApplicationListener<Event> {
 					.createGameIfPossible()
 					.ifPresent(this.eventPublisher::fireGameStarted);
 			}
-			case GAME_FINISHED: {
-				this.gameService
-					.createLogFor((Game)event.getPayload());
-			}
 		}
 		if (eventType.triggersAutoMessage()) {
 			String destination = eventType.getEndpoint(event.getId());

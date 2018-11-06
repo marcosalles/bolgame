@@ -22,7 +22,7 @@ class PlayerRegistryHandler {
 			player => this.didRegister(registryHash, player, callback));
 
 		const player = Helper.STORAGE.getPlayerData();
-		this.socket.send(this.endpoints.register.send(registryHash), new Message(username, player.id));
+		this.socket.send(this.endpoints.register.send(registryHash), new Message(username, player.id || ''));
 	}
 
 	didRegister(hash, player, callback) {

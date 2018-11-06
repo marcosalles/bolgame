@@ -40,7 +40,7 @@ public class PlayerServiceTest {
 			.when(playerDAO).findById(id);
 		doReturn(savedPlayer).when(playerDAO).save(savedPlayer);
 
-		service.registerPlayer(hash, id, username);
+		service.registerPlayer(hash, Optional.ofNullable(id), username);
 		verify(playerDAO).save(savedPlayer);
 		verify(eventPublisher).firePlayerRegistered(hash, savedPlayer);
 	}
@@ -56,7 +56,7 @@ public class PlayerServiceTest {
 		var builtPlayer = Player.builder().id(id).username(username).build();
 		doReturn(builtPlayer).when(playerDAO).save(any());
 
-		service.registerPlayer(hash, id, username);
+		service.registerPlayer(hash, Optional.ofNullable(id), username);
 		verify(playerDAO, never()).save(builtPlayer);
 		verify(eventPublisher).firePlayerRegistered(hash, builtPlayer);
 	}

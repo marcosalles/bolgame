@@ -21,14 +21,24 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="score : ${scores}" class="text-light"
-			    th:classappend="${score.isWinner(player)} ? bg-success : bg-danger">
+			<tr th:each="score : ${scores}"
+			    th:classappend="${score.winner} ? (${score.isWinner(player)} ? bg-success : bg-danger) : bg-warning">
 				<td th:text="${score.getOpponentsUsername(player)}"></td>
 				<td th:text="${score.scoreVersus}"></td>
 				<td th:text="${#dates.format(score.game.createdAt, 'd MMM, yyyy')}"></td>
 				<td th:text="${#dates.format(score.createdAt, 'd MMM, yyyy')}"></td>
 			</tr>
 		</tbody>
+		<tfoot>
+		<tr>
+			<td colspan="4">
+				<label>Labels: </label>
+				<span class="btn text-white bg-success">Victory</span>
+				<span class="btn bg-warning">Draw</span>
+				<span class="btn bg-danger">Defeat</span>
+			</td>
+		</tr>
+		</tfoot>
 	</table>
 </main>
 

@@ -10,6 +10,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Optional;
+
 @Controller
 public class GameController {
 
@@ -25,7 +27,7 @@ public class GameController {
 
 	@MessageMapping("/user/{hash}/register")
 	public void register(@DestinationVariable final String hash, final Message<String> message) {
-		this.playerService.registerPlayer(hash, message.getPlayerId(), message.getContents());
+		this.playerService.registerPlayer(hash, Optional.ofNullable(message.getPlayerId()), message.getContents());
 	}
 
 	@MessageMapping("/user/{hash}/game/search")

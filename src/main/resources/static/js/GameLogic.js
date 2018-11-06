@@ -1,5 +1,4 @@
 const GameState = {
-	STARTED: 'STARTED',
 	PLAYER_ONES_TURN: 'PLAYER_ONES_TURN',
 	PLAYER_TWOS_TURN: 'PLAYER_TWOS_TURN',
 	FINISHED: 'FINISHED'
@@ -10,8 +9,8 @@ class GameLogic {
 		this.player = {};
 		this.socket = undefined;
 		this.turnOrder = {
-			player: 'one',
-			opponent: 'two'
+			player: undefined,
+			opponent: undefined
 		};
 
 		this.elements = {
@@ -22,6 +21,7 @@ class GameLogic {
 			},
 			game: {
 				board: $('.game'),
+				turnMarker: $('#players-turn'),
 				pitsFor: (player) => $(`.pit[data-owner="${player}"]`),
 				allPits: $('.pit'),
 				pitWithId: (id) => $(`.pit#${id}`)
@@ -106,10 +106,21 @@ class GameLogic {
 		this.elements.game.pitsFor(this.turnOrder.player).css('pointer-events', events);
 	}
 
+	updateTurnMarker(score) {
+		if (score) {
+			this.elements.game.turnMarker.html(`Game finished! The winner is <em>${score.winner.username}</em>!`);
+		} else {
+			const turnOwner = this.game.state == GameState.PLAYER_ONES_TURN ? 'one' : 'two';
+			const currentPlayer = this.game[`player${turnOwner}`];
+			this.elements.game.turnMarker.html(`Currently playing: <em>${currentPlayer.username}</em>`);
+		}
+	}
+
 	updateBoard(game) {
 		if (game) {
 			this.updateGame(game);
 		}
+		this.updateTurnMarker();
 
 		const pitValues = this.game.pits;
 		Object.keys(pitValues).forEach(id => {
@@ -159,7 +170,10 @@ class GameLogic {
 		this.updateBoard(game);
 	}
 
-	gameFinished(result) {
-		console.log(`>> GameLogic::gameFinished(${JSON.stringify(result)}) <<`);
+	gameFinished(score) {
+		console.log(`>> GameLogic::gameFinished(${JSON.stringify(score)}) <<`);
+		this.updateBoard(score.game);
+		this.disableBoard();
+		this.updateTurnMarker(score);
 	}
 }

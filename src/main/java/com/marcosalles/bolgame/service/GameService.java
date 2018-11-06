@@ -6,6 +6,7 @@ import com.marcosalles.bolgame.dao.ScoreDAO;
 import com.marcosalles.bolgame.event.EventPublisher;
 import com.marcosalles.bolgame.model.dto.TurnInfo;
 import com.marcosalles.bolgame.model.entity.Game;
+import com.marcosalles.bolgame.model.entity.GameState;
 import com.marcosalles.bolgame.model.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.marcosalles.bolgame.model.entity.GameState.FINISHED;
 
 @Service
 public class GameService {
@@ -71,6 +74,9 @@ public class GameService {
 					if (moveMade) {
 						this.gameDAO.save(game);
 						this.eventPublisher.fireMoveMade(game);
+						if (game.is(FINISHED)) {
+							this.createLogFor(game);
+						}
 					}
 				},
 				() -> this.notifyInvalidData(player)

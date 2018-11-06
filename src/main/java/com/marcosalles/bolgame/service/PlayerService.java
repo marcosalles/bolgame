@@ -28,8 +28,8 @@ public class PlayerService {
 	@Autowired
 	private EventPublisher eventPublisher;
 
-	public void registerPlayer(final String hash, final String playerId, final String username) {
-		final var optionalPlayer = playerDAO.findById(playerId);
+	public void registerPlayer(final String hash, final Optional<String> optionalPlayerId, final String username) {
+		final var optionalPlayer = playerDAO.findById(optionalPlayerId.orElseGet(() -> ""));
 		var player = optionalPlayer.orElseGet(() ->
 			Player.builder()
 				.id(UUID.randomUUID().toString())
