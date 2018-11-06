@@ -25,6 +25,6 @@ public class UserController {
 			model.addAttribute("scores", scores);
 			return "player/scores";
 		}
-		return "404";
+		return "";
 	}
 }

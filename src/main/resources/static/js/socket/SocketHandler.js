@@ -8,8 +8,8 @@ class SocketHandler {
 		return 'SocketHandler';
 	}
 
-	connect(callback, playerId) {
-		console.log(`>> SocketHandler::connect(${callback}, ${playerId}) <<`);
+	connect(callback) {
+		console.log(`>> SocketHandler::connect(${callback}) <<`);
 		this.stomp.connect({}, frame => callback(frame));
 	}
 

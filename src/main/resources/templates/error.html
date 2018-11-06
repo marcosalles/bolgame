@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<title>The Bol Game</title>
+	<link href="/css/lib/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<main class="container">
+	<div class="jumbotron">
+		<h1><span th:text="${status}"></span> - Oops! Something went wrong..</h1>
+		<p th:text="${message}"></p>
+	</div>
+</main>
+</body>
+</html>

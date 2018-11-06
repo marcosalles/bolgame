@@ -11,23 +11,22 @@
 		<h1>Player <span th:text="${player.username}">anonymous</span>'s history</h1>
 		<p>Wow, such games, much wins, very losses!</p>
 	</div>
-	<table class="table table-striped">
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Played against</th>
 				<th>Score</th>
-				<th>Victory!</th>
 				<th>Start</th>
 				<th>Finish</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="score : ${scores}">
+			<tr th:each="score : ${scores}" class="text-light"
+			    th:classappend="${score.isWinner(player)} ? bg-success : bg-danger">
 				<td th:text="${score.getOpponentsUsername(player)}"></td>
 				<td th:text="${score.scoreVersus}"></td>
-				<td th:text="${score.isWinner(player)}"></td>
-				<td th:text="${score.createdAt}"></td>
-				<td th:text="${score.updatedAt}"></td>
+				<td th:text="${#dates.format(score.game.createdAt, 'd MMM, yyyy')}"></td>
+				<td th:text="${#dates.format(score.createdAt, 'd MMM, yyyy')}"></td>
 			</tr>
 		</tbody>
 	</table>
