@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,18 +25,27 @@ public class GameDAOTest {
 	@Autowired
 	private PlayerDAO playerDao;
 
+	@Test(expected = JpaSystemException.class)
+	public void save__should_not_save_without_id() {
+		final var game = Game.builder()
+			.playerOne(playerDao.save(this.player("player-1")))
+			.playerTwo(playerDao.save(this.player("player-2")))
+			.build();
+		gameDAO.save(game);
+	}
+
 	@Test
 	public void findByParticipantId__should_return_null_if_no_games() {
-		Player player = playerDao.save(this.player("player"));
+		final var player = playerDao.save(this.player("player"));
 		assertThat(gameDAO.findAll().iterator().hasNext(), is(false));
 		assertThat(gameDAO.findByParticipantId(player.getId()), is(nullValue()));
 	}
 
 	@Test
 	public void findByParticipantId__should_return_null_if_no_games_with_participant() {
-		Player playerOne = playerDao.save(this.player("player-1"));
-		Player playerTwo = playerDao.save(this.player("player-2"));
-		Player playerThree = playerDao.save(this.player("player-3"));
+		final var playerOne = playerDao.save(this.player("player-1"));
+		final var playerTwo = playerDao.save(this.player("player-2"));
+		final var playerThree = playerDao.save(this.player("player-3"));
 		gameDAO.save(Game
 			.builder()
 			.id("game-1")
@@ -48,9 +58,9 @@ public class GameDAOTest {
 
 	@Test
 	public void findByParticipantId__should_return_game_with_player_one() {
-		Player playerOne = playerDao.save(this.player("player-1"));
-		Player playerTwo = playerDao.save(this.player("player-2"));
-		Game game = gameDAO.save(Game
+		final var playerOne = playerDao.save(this.player("player-1"));
+		final var playerTwo = playerDao.save(this.player("player-2"));
+		final var game = gameDAO.save(Game
 			.builder()
 			.id("game-1")
 			.playerOne(playerOne)
@@ -62,9 +72,9 @@ public class GameDAOTest {
 
 	@Test
 	public void findByParticipantId__should_return_game_with_player_two() {
-		Player playerOne = playerDao.save(this.player("player-1"));
-		Player playerTwo = playerDao.save(this.player("player-2"));
-		Game game = gameDAO.save(Game
+		final var playerOne = playerDao.save(this.player("player-1"));
+		final var playerTwo = playerDao.save(this.player("player-2"));
+		final var game = gameDAO.save(Game
 			.builder()
 			.id("game-1")
 			.playerOne(playerOne)
