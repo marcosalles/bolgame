@@ -66,7 +66,7 @@ public class GameService {
 			.playerTwo(playerTwo)
 			.build();
 
-		this.gameDAO.save(game);
+		game = this.gameDAO.save(game);
 		return game;
 	}
 

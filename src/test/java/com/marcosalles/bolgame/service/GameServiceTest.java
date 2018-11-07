@@ -63,16 +63,16 @@ public class GameServiceTest {
 	}
 
 	@Test
-	public void startGame__should_create_game_with_shuffled_players() {
+	public void startGame__should_create_and_save_game() {
 		final var queuedPlayer = mock(QueuedPlayer.class);
 		final var aPlayer = mock(Player.class);
 		final var anotherPlayer = mock(Player.class);
 		doReturn(aPlayer, anotherPlayer).when(queuedPlayer).getPlayer();
 		doReturn(queuedPlayer).when(queueDAO).findFirstByOrderByCreatedAtAsc();
+		when(gameDAO.save(any())).thenReturn(mock(Game.class));
 
-		final var game = service.startGame();
-		assertThat(game, not(nullValue()));
-		assertThat(List.of(game.getPlayerOne(), game.getPlayerTwo()), containsInAnyOrder(aPlayer, anotherPlayer));
+		assertThat(service.startGame(), not(nullValue()));
+		verify(gameDAO).save(any());
 	}
 
 	@Test
