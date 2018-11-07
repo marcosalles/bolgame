@@ -44,6 +44,6 @@ public class Score extends BaseEntity {
 	}
 
 	public boolean isWinner(Player player) {
-		return winner.equals(player);
+		return winner != null && winner.equals(player);
 	}
 }
