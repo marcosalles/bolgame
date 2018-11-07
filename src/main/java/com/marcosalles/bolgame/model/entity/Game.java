@@ -47,19 +47,19 @@ public class Game extends BaseEntity {
 		this.playerTwo = playerTwo;
 
 		this.pits = new HashMap<>();
-		this.pits.put("pit-one-1", 0);
-		this.pits.put("pit-one-2", 0);
-		this.pits.put("pit-one-3", 0);
-		this.pits.put("pit-one-4", 0);
-		this.pits.put("pit-one-5", 2);
-		this.pits.put("pit-one-6", 1);
+		this.pits.put("pit-one-1", 6);
+		this.pits.put("pit-one-2", 6);
+		this.pits.put("pit-one-3", 6);
+		this.pits.put("pit-one-4", 6);
+		this.pits.put("pit-one-5", 6);
+		this.pits.put("pit-one-6", 6);
 		this.pits.put("pit-one-big", 0);
-		this.pits.put("pit-two-1", 0);
-		this.pits.put("pit-two-2", 0);
-		this.pits.put("pit-two-3", 0);
-		this.pits.put("pit-two-4", 0);
-		this.pits.put("pit-two-5", 0);
-		this.pits.put("pit-two-6", 1);
+		this.pits.put("pit-two-1", 6);
+		this.pits.put("pit-two-2", 6);
+		this.pits.put("pit-two-3", 6);
+		this.pits.put("pit-two-4", 6);
+		this.pits.put("pit-two-5", 6);
+		this.pits.put("pit-two-6", 6);
 		this.pits.put("pit-two-big", 0);
 	}
 
