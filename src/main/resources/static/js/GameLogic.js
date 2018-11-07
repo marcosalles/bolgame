@@ -22,7 +22,7 @@ class GameLogic {
 			game: {
 				board: $('.game'),
 				turnMarker: $('#players-turn'),
-				pitsFor: (player) => $(`.pit[data-owner="${player}"]`),
+				pitsFor: (player) => $(`.pit[data-owner="${player}"]:not(data-stones="0"])`),
 				allPits: $('.pit'),
 				pitWithId: (id) => $(`.pit#${id}`)
 			}
