@@ -19,10 +19,6 @@ class GameLogic {
 				one: $('#game-player-one'),
 				two: $('#game-player-two')
 			},
-			actions: [
-				$('#action-scores'),
-				$('#action-play')
-			],
 			game: {
 				board: $('.game'),
 				turnMarker: $('#players-turn'),
@@ -52,6 +48,8 @@ class GameLogic {
 	startGame(game) {
 		console.log(`>> GameLogic::startGame(${JSON.stringify(game)}}) <<`);
 		this.disableBoard();
+		Helper.FUNCTIONS.actions.hideAction(Helper.KEYS.actions.scores);
+		Helper.FUNCTIONS.actions.showAction(Helper.KEYS.actions.quit);
 
 		this.socket.subscribe(
 			this.endpoints.refresh.subscribe(this.player.id),
@@ -119,7 +117,11 @@ class GameLogic {
 
 	updateTurnMarker(score) {
 		if (score) {
-			this.elements.game.turnMarker.html(`Game finished! The winner is <em>${score.winner.username}</em>!`);
+			let message = 'It was a draw!';
+			if (score.winner) {
+				message = `The winner is <em>${score.winner.username}</em>!`;
+			}
+			this.elements.game.turnMarker.html(`Game finished! ${message}`);
 		} else {
 			const turnOwner = this.game.state == GameState.PLAYER_ONES_TURN ? 'one' : 'two';
 			const currentPlayer = this.game[`player${turnOwner}`];
@@ -190,14 +192,8 @@ class GameLogic {
 	scoreSaved(score) {
 		console.log(`>> GameLogic::scoreSaved(${JSON.stringify(score)}) <<`);
 		this.updateTurnMarker(score);
-		this.showActions();
-	}
-
-	showActions() {
-		this.elements.actions.forEach(action => action.show());
-	}
-
-	hideActions() {
-		this.elements.actions.forEach(action => action.hide());
+		Helper.FUNCTIONS.actions.showAction(Helper.KEYS.actions.play);
+		Helper.FUNCTIONS.actions.hideAction(Helper.KEYS.actions.quit);
+		Helper.FUNCTIONS.actions.showAction(Helper.KEYS.actions.scores);
 	}
 }

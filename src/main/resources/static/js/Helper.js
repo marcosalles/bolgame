@@ -3,6 +3,11 @@ const Helper = {
 		player: {
 			id: 'bolgame.player.id',
 			username: 'bolgame.player.username',
+		},
+		actions: {
+			play: 'play',
+			scores: 'scores',
+			quit: 'quit'
 		}
 	},
 
@@ -32,6 +37,27 @@ const Helper = {
 				randomString += Math.random().toString(36).replace(/[^\w-]+/g, '');
 			}
 			return randomString.substr(0, charCount);
+		},
+		actions: {
+			setScoresPlayerId: id => {
+				$(`#action-${Helper.KEYS.actions.scores}`).attr('href', `/player/${id}/scores`);
+			},
+			showAction: (name, action) => {
+				const button = $(`#action-${name}`);
+				if (!button.length) return;
+				button.removeClass('hidden');
+				button.off('click');
+				button.on('click', () => action());
+				if ($('#actions .btn:not(.hidden)').length) {
+					$('#actions').removeClass('hidden');
+				}
+			},
+			hideAction: name => {
+				$(`#action-${name}`).addClass('hidden')
+				if (!$('#actions .btn:not(.hidden)').length) {
+					$('#actions').addClass('hidden');
+				}
+			}
 		}
 	}
 };

@@ -62,10 +62,11 @@
 		</div>
 		<label class="game__player game__player--two" id="game-player-two">Player Two:</label>
 	</div>
-	<div class="row">
+	<div id="actions" class="row hidden">
 		<label>Actions: </label>
-		<button id="action-play" type="button" class="btn btn-default" style="display: none">Play again</button>
-		<button id="action-scores" type="button" class="btn btn-info" style="display: none">See scores</button>
+		<a id="action-play" href="/play" class="btn btn-primary hidden">Play again</a>
+		<a id="action-quit" href="/play" class="btn btn-danger hidden">Quit</a>
+		<a id="action-scores" href="/player" class="btn btn-info hidden">See scores</a>
 	</div>
 	<div class="row">
 		<h3>Instructions</h3>
