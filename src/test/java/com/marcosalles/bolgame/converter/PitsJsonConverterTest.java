@@ -1,7 +1,5 @@
 package com.marcosalles.bolgame.converter;
 
-import org.hamcrest.Matchers;
-import org.hamcrest.junit.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +7,6 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class PitsJsonConverterTest {
 

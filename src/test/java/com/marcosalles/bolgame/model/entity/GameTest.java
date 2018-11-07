@@ -5,14 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.marcosalles.bolgame.model.entity.GameState.FINISHED;
-import static com.marcosalles.bolgame.model.entity.GameState.PLAYER_ONES_TURN;
-import static com.marcosalles.bolgame.model.entity.GameState.PLAYER_TWOS_TURN;
+import static com.marcosalles.bolgame.model.entity.GameState.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
 
 class GameTest {
 
@@ -129,19 +126,19 @@ class GameTest {
 	@Test
 	void moveAllStonesToBigPits__should_move_every_remaining_stone_into_the_corresponding_players_big_pit() {
 		rangeClosed(1, 6).forEach(i -> {
-			this.game.getPits().put("pit-one-"+i, 3);
-			this.game.getPits().put("pit-two-"+i, 9);
+			this.game.getPits().put("pit-one-" + i, 3);
+			this.game.getPits().put("pit-two-" + i, 9);
 		});
 
 		assertThat(this.game.getPits().get("pit-one-big"), is(0));
 		assertThat(this.game.getPits().get("pit-two-big"), is(0));
 		this.game.moveAllStonesToBigPits();
 
-		assertThat(this.game.getPits().get("pit-one-big"), is(3*6));
-		assertThat(this.game.getPits().get("pit-two-big"), is(9*6));
+		assertThat(this.game.getPits().get("pit-one-big"), is(3 * 6));
+		assertThat(this.game.getPits().get("pit-two-big"), is(9 * 6));
 		rangeClosed(1, 6).forEach(i -> {
-			assertThat(this.game.getPits().get("pit-one-"+i), is(0));
-			assertThat(this.game.getPits().get("pit-two-"+i), is(0));
+			assertThat(this.game.getPits().get("pit-one-" + i), is(0));
+			assertThat(this.game.getPits().get("pit-two-" + i), is(0));
 		});
 	}
 
@@ -207,10 +204,10 @@ class GameTest {
 	void getOppositePitKey__should_return_valid_key_for_opposing_player_and_mirrored_index() {
 		rangeClosed(1, 6).forEach(i -> {
 			var expectedTwoKey = "pit-two-" + (7 - i);
-			assertThat(this.game.getOppositePitKey("anything! goes-here, but..-"+i, "two"), is(expectedTwoKey));
+			assertThat(this.game.getOppositePitKey("anything! goes-here, but..-" + i, "two"), is(expectedTwoKey));
 
 			var expectedOneKey = "pit-one-" + (7 - i);
-			assertThat(this.game.getOppositePitKey("must &nd with híphen and #-"+i, "one"), is(expectedOneKey));
+			assertThat(this.game.getOppositePitKey("must &nd with híphen and #-" + i, "one"), is(expectedOneKey));
 		});
 	}
 
@@ -227,7 +224,7 @@ class GameTest {
 
 	@Test
 	void goToNextState__should_change_to_finished_if_game_ended() {
-		rangeClosed(1, 6).forEach(i -> this.game.getPits().put("pit-one-"+i, 0));
+		rangeClosed(1, 6).forEach(i -> this.game.getPits().put("pit-one-" + i, 0));
 
 		this.game.setState(PLAYER_ONES_TURN);
 		this.game.goToNextState();
@@ -244,13 +241,13 @@ class GameTest {
 		List<Integer> pitValues = pits.stream().map(pit -> pit.getValue()).collect(toList());
 		if (isInStartingState) {
 			assertThat("pit values changed", pitValues, contains(
-				6,6,6,6,6,6,0,
-				6,6,6,6,6,6,0)
+				6, 6, 6, 6, 6, 6, 0,
+				6, 6, 6, 6, 6, 6, 0)
 			);
 		} else {
 			assertThat("pit values should have changed", pitValues, not(contains(
-				6,6,6,6,6,6,0,
-				6,6,6,6,6,6,0)
+				6, 6, 6, 6, 6, 6, 0,
+				6, 6, 6, 6, 6, 6, 0)
 			));
 		}
 	}

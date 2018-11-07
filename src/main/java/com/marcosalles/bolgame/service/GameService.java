@@ -6,7 +6,6 @@ import com.marcosalles.bolgame.dao.ScoreDAO;
 import com.marcosalles.bolgame.event.EventPublisher;
 import com.marcosalles.bolgame.model.dto.TurnInfo;
 import com.marcosalles.bolgame.model.entity.Game;
-import com.marcosalles.bolgame.model.entity.GameState;
 import com.marcosalles.bolgame.model.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 @Getter

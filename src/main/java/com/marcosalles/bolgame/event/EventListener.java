@@ -1,7 +1,6 @@
 package com.marcosalles.bolgame.event;
 
 import com.marcosalles.bolgame.model.Event;
-import com.marcosalles.bolgame.model.entity.Game;
 import com.marcosalles.bolgame.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
