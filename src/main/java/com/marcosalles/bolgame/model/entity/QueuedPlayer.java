@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -15,7 +16,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class QueuedPlayer extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = SEQUENCE)
+	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
 	@OneToOne
