@@ -7,6 +7,8 @@ import com.marcosalles.bolgame.event.EventPublisher;
 import com.marcosalles.bolgame.model.dto.TurnInfo;
 import com.marcosalles.bolgame.model.entity.Game;
 import com.marcosalles.bolgame.model.entity.Player;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.UUID;
 import static com.marcosalles.bolgame.model.entity.GameState.FINISHED;
 
 @Service
+@NoArgsConstructor
+@AllArgsConstructor
 public class GameService {
 
 	public static final long NUMBER_OF_PLAYERS_FOR_GAME = 2L;
@@ -62,7 +66,8 @@ public class GameService {
 			.playerTwo(playerTwo)
 			.build();
 
-		return this.gameDAO.save(game);
+		this.gameDAO.save(game);
+		return game;
 	}
 
 	public void makeMoveFor(Player player, TurnInfo turnInfo) {
