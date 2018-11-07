@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -29,27 +28,16 @@ public class PlayerService {
 	private EventPublisher eventPublisher;
 
 	public void registerPlayer(final String hash, final Optional<String> optionalPlayerId, final String username) {
-		final var optionalPlayer = playerDAO.findById(optionalPlayerId.orElseGet(() -> ""));
+		final var optionalPlayer = playerDAO.findById(optionalPlayerId.orElse(""));
 		var player = optionalPlayer.orElseGet(() ->
 			Player.builder()
 				.id(UUID.randomUUID().toString())
 				.build()
 		);
-		this.changeUsernameIfNotAnon(player, username);
+		player.setUsername(HtmlUtils.htmlEscape(username));
 
 		player = playerDAO.save(player);
 		this.eventPublisher.firePlayerRegistered(hash, player);
-	}
-
-	protected void changeUsernameIfNotAnon(final Player player, final String username) {
-		final var anonymous = "anonymous";
-		final var newUsername = StringUtils.concatReplaceNulls(anonymous, username);
-
-		final boolean userWasAnon = anonymous.equals(player.getUsername());
-		final boolean newUsernameIsCustom = !anonymous.equals(newUsername);
-		if (userWasAnon || newUsernameIsCustom) {
-			player.setUsername(HtmlUtils.htmlEscape(username));
-		}
 	}
 
 	public void placeOnQueue(final Player player) {

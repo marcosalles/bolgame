@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -62,28 +61,31 @@ public class PlayerServiceTest {
 	}
 
 	@Test
-	public void changeUsernameIfNotAnon__should_overwrite_username_if_previous_is_anonymous() {
-		var expectedUsername = "username";
-		var player = Player.builder().username("anonymous").build();
-		service.changeUsernameIfNotAnon(player, expectedUsername);
-		assertThat(player.getUsername(), is(expectedUsername));
+	void placeOnQueue__should_save_queued_player_if_not_yet_there() {
+		final var player = mock(Player.class);
+		doReturn(false).when(queueDAO).exists(any());
+		service.placeOnQueue(player);
+		verify(queueDAO).save(any());
 	}
 
 	@Test
-	public void changeUsernameIfNotAnon__should_overwrite_username_if_previous_is_different_and_new_is_not_anonymous() {
-		var expectedUsername = "other-username";
-		var player = Player.builder().username("username").build();
-		service.changeUsernameIfNotAnon(player, expectedUsername);
-		assertThat(player.getUsername(), is(expectedUsername));
+	void placeOnQueue__should_fire_event_for_player() {
+		final var player = mock(Player.class);
+		service.placeOnQueue(player);
+		verify(eventPublisher).firePlayerQueued(player);
 	}
 
 	@Test
-	public void changeUsernameIfNotAnon__should_not_overwrite_username_if_new_is_anonymous() {
-		var unexpectedUsername = "anonymous";
-		var expectedUsername = "username";
-		var player = Player.builder().username(expectedUsername).build();
-		service.changeUsernameIfNotAnon(player, unexpectedUsername);
-		assertThat(player.getUsername(), not(unexpectedUsername));
-		assertThat(player.getUsername(), is(expectedUsername));
+	void getPlayerFor__should_return_empty_if_no_player_exists() {
+		final var id = "id";
+		doReturn(Optional.empty()).when(playerDAO).findById(id);
+		assertThat(service.getPlayerFor(id), is(Optional.empty()));
+	}
+
+	@Test
+	void getPlayerFor__should_return_player_when_exists() {
+		final var id = "id";
+		doReturn(Optional.of(mock(Player.class))).when(playerDAO).findById(id);
+		assertThat(service.getPlayerFor(id).isPresent(), is(true));
 	}
 }
