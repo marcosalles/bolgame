@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
 @Entity
 @Table(name = "scores")
 @Getter
@@ -13,7 +15,7 @@ import javax.persistence.*;
 public class Score extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = SEQUENCE)
 	private Long id;
 
 	@OneToOne

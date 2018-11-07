@@ -4,7 +4,10 @@ class PlayerRegistryHandler {
 		console.log(`>> PlayerRegistryHandler::constructor() <<`);
 		this.elements = {
 			form: $('#register-for-game'),
-			username: $('#username')
+			username: $('#username'),
+			actions: {
+				scores: $('#action-scores')
+			}
 		};
 		this.endpoints = {
 			register: {
@@ -30,6 +33,10 @@ class PlayerRegistryHandler {
 		this.socket.unsubscribe(this.endpoints.register.subscribe(hash));
 
 		Helper.STORAGE.savePlayerData(player);
+		this.elements.actions.scores.on('click', () => {
+			window.location = `/player/${player.id}/scores`;
+		});
+		this.elements.actions.scores.show();
 		callback(player);
 	}
 

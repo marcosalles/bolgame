@@ -19,6 +19,10 @@ class GameLogic {
 				one: $('#game-player-one'),
 				two: $('#game-player-two')
 			},
+			actions: [
+				$('#action-scores'),
+				$('#action-play')
+			],
 			game: {
 				board: $('.game'),
 				turnMarker: $('#players-turn'),
@@ -38,6 +42,9 @@ class GameLogic {
 			},
 			finished: {
 				subscribe: id => `user/${id}/game/finished`
+			},
+			scoreSaved: {
+				subscribe: id => `user/${id}/game/score/saved`
 			}
 		}
 	}
@@ -55,6 +62,9 @@ class GameLogic {
 		this.socket.subscribe(
 			this.endpoints.finished.subscribe(this.player.id),
 			result => this.gameFinished(result));
+		this.socket.subscribe(
+			this.endpoints.scoreSaved.subscribe(this.player.id),
+			result => this.scoreSaved(result));
 
 		this.elements.game.board.removeClass('game--inactive');
 
@@ -70,6 +80,7 @@ class GameLogic {
 		});
 
 		this.updateBoard();
+		this.hideActions();
 	}
 
 	updateGame(game) {
@@ -170,10 +181,23 @@ class GameLogic {
 		this.updateBoard(game);
 	}
 
-	gameFinished(score) {
-		console.log(`>> GameLogic::gameFinished(${JSON.stringify(score)}) <<`);
-		this.updateBoard(score.game);
+	gameFinished(game) {
+		console.log(`>> GameLogic::gameFinished(${JSON.stringify(game)}) <<`);
+		this.updateBoard(game);
 		this.disableBoard();
+	}
+
+	scoreSaved(score) {
+		console.log(`>> GameLogic::scoreSaved(${JSON.stringify(score)}) <<`);
 		this.updateTurnMarker(score);
+		this.showActions();
+	}
+
+	showActions() {
+		this.elements.actions.forEach(action => action.show());
+	}
+
+	hideActions() {
+		this.elements.actions.forEach(action => action.hide());
 	}
 }
