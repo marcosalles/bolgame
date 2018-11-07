@@ -3,6 +3,9 @@ package com.marcosalles.bolgame.model.entity;
 import com.marcosalles.bolgame.model.EventType;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.marcosalles.bolgame.model.EventType.GAME_FINISHED;
 import static com.marcosalles.bolgame.model.EventType.TURN_OVER;
 
@@ -38,6 +41,6 @@ public enum GameState {
 	}
 
 	public boolean isAllowed(String playersPlace) {
-		return name().toLowerCase().contains(playersPlace);
+		return Arrays.asList("one", "two").contains(playersPlace) && name().toLowerCase().contains(playersPlace);
 	}
 }
