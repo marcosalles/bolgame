@@ -15,6 +15,11 @@ public class UserController {
 	@Autowired
 	private ScoreService scoreService;
 
+	@GetMapping("/home")
+	public String home() {
+		return "player/home";
+	}
+
 	@GetMapping("/player/{hash}/scores")
 	public String scores(@PathVariable("hash") final String playerId, Model model) {
 		var optionalPlayer = this.playerService.getPlayerFor(playerId);
