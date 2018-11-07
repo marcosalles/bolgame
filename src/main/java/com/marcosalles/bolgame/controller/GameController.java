@@ -20,7 +20,7 @@ public class GameController {
 	@Autowired
 	private GameService gameService;
 
-	@GetMapping("/play")
+	@GetMapping({"/", "/play"})
 	public String play() {
 		return "play";
 	}
